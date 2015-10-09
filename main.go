@@ -64,6 +64,10 @@ func main() {
 
 	}
 
+	if len(filtered) == 0 {
+		return
+	}
+
 	fmt.Printf("✅ %v\n", len(filtered))
 
 	for _, task := range filtered {
