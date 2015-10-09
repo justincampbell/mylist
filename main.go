@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"time"
 
 	"github.com/robdimsdale/wl"
@@ -11,7 +14,22 @@ import (
 	wl_oauth "github.com/robdimsdale/wl/oauth"
 )
 
+var maxCacheAge, _ = time.ParseDuration("15m")
+
 func main() {
+	tmpDir := os.TempDir()
+	cacheFile := path.Join(tmpDir, "mylist")
+
+	if !isCacheStale(cacheFile) {
+		cached, err := ioutil.ReadFile(cacheFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Print(string(cached))
+		return
+	}
+
 	client := wl_oauth.NewClient(
 		os.Getenv("WL_ACCESS_TOKEN"),
 		os.Getenv("WL_CLIENT_ID"),
@@ -64,13 +82,27 @@ func main() {
 
 	}
 
-	if len(filtered) == 0 {
-		return
+	var output bytes.Buffer
+
+	if len(filtered) != 0 {
+		output.WriteString(fmt.Sprintf("✅ %v\n", len(filtered)))
+
+		for _, task := range filtered {
+			output.WriteString(task.Title)
+			output.WriteString("\n")
+		}
 	}
 
-	fmt.Printf("✅ %v\n", len(filtered))
-
-	for _, task := range filtered {
-		fmt.Println(task.Title)
+	err = ioutil.WriteFile(cacheFile, []byte(output.String()), 0644)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	fmt.Print(output.String())
+}
+
+func isCacheStale(cacheFile string) bool {
+	stat, err := os.Stat(cacheFile)
+
+	return os.IsNotExist(err) || time.Since(stat.ModTime()) > maxCacheAge
 }
