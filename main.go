@@ -26,6 +26,11 @@ func main() {
 
 	myID := root.UserID
 
+	lists, err := client.Lists()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	tasks, err := client.Tasks()
 	if err != nil {
 		log.Fatal(err)
@@ -63,7 +68,22 @@ func main() {
 
 	fmt.Printf("✅ %v\n", len(filtered))
 
+	var lastList uint
+
 	for _, task := range filtered {
-		fmt.Println(task.Title)
+		// Print the list header
+		if lastList != task.ListID {
+			for _, list := range lists {
+				if list.ID == task.ListID {
+					fmt.Printf("\n%s\n\n", list.Title)
+					lastList = list.ID
+					break
+				}
+			}
+		}
+
+		fmt.Printf("  %s\n", task.Title)
 	}
+
+	fmt.Println()
 }
