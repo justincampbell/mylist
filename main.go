@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/robdimsdale/wl"
-	wl_logger "github.com/robdimsdale/wl/logger"
-	wl_oauth "github.com/robdimsdale/wl/oauth"
+	"github.com/justincampbell/mylist/Godeps/_workspace/src/github.com/robdimsdale/wl"
+	wl_logger "github.com/justincampbell/mylist/Godeps/_workspace/src/github.com/robdimsdale/wl/logger"
+	wl_oauth "github.com/justincampbell/mylist/Godeps/_workspace/src/github.com/robdimsdale/wl/oauth"
 )
 
 func main() {

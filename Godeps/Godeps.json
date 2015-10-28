@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/justincampbell/mylist",
+	"GoVersion": "go1.4.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/robdimsdale/wl",
+			"Comment": "v1.2.1",
+			"Rev": "1e4bf08ab5930a2f80467bc2078c90127e51b73d"
+		}
+	]
+}
