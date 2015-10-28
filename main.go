@@ -82,7 +82,28 @@ func main() {
 			}
 		}
 
-		fmt.Printf("  %s\n", task.Title)
+		var overdueString string
+		if !task.DueDate.IsZero() && time.Now().After(task.DueDate) {
+			overdueString = "⏰ "
+		}
+
+		var assignedString string
+		if task.AssigneeID == myID {
+			assignedString = "👤 "
+		}
+
+		var starString string
+		if task.Starred {
+			starString = "🌟 "
+		}
+
+		fmt.Printf(
+			"  %s%s%s%s\n",
+			overdueString,
+			assignedString,
+			starString,
+			task.Title,
+		)
 	}
 
 	fmt.Println()
