@@ -51,15 +51,8 @@ func main() {
 		}
 
 		// Include overdue tasks
-		if task.DueDate != "" {
-			dueDate, err := time.Parse("2006-01-02", task.DueDate)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			if time.Now().After(dueDate) {
-				filtered = append(filtered, task)
-			}
+		if !task.DueDate.IsZero() && time.Now().After(task.DueDate) {
+			filtered = append(filtered, task)
 		}
 
 	}
